@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import puzzle.State;
 
-public class StrideShifterState implements State<Direction, StrideShifterState>, Cloneable{
+public class StrideShifterState implements State<Direction, StrideShifterState>{
 
     /** The size of the board (8x8).*/
     public static final int BOARD_SIZE=8;
