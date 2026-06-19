@@ -1,8 +1,11 @@
 package hu.unideb.inf.strideshifter.model;
 
+import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Set;
+import puzzle.State;
 
-public class StrideShifterState {
+public class StrideShifterState implements State<Direction, StrideShifterState>, Cloneable{
 
     /** The size of the board (8x8).*/
     public static final int BOARD_SIZE=8;
@@ -54,6 +57,96 @@ public class StrideShifterState {
     }
 
     /**
+     * Creates a deep copy of the specified {@code StrideShifterState} object.
+     *
+     * @param other the state object to be copied
+     */
+    public StrideShifterState(StrideShifterState other) {
+        this.currentPosition = other.currentPosition;
+        this.currentStepSize = other.currentStepSize;
+    }
+
+    /**
+     * Checks if the puzzle is solved.
+     *
+     * @return true if the token is at the goal position, false otherwise
+     */
+    @Override
+    public boolean isSolved(){
+        return currentPosition.equals(GOAL_POSITION);
+    }
+
+    /**
+     * Checks if the given position is within the boundaries of the board.
+     *
+     * @param position the position to check
+     * @return true if the position is valid, false otherwise
+     */
+    public boolean isOnBoard(Position position){
+        return position.row()>=0 && position.row()<BOARD_SIZE
+                && position.col()>=0 && position.col()<BOARD_SIZE;
+    }
+
+    /**
+     * Checks if moving in the given direction is legal from the current state.
+     *
+     * @param direction the direction to move
+     * @return true if the move is valid, false otherwise
+     */
+    @Override
+    public boolean isLegalMove(Direction direction){
+        if(direction == null)
+            return false;
+        Position nextPosition = currentPosition.move(direction,currentStepSize);
+        return isOnBoard(nextPosition) && !WALLS.contains(nextPosition);
+    }
+
+    /**
+     * Moves the token in the given direction.
+     * Updates the position and toggles the step size if landing on a shifter cell.
+     *
+     * @param direction the direction to move
+     * @throws IllegalArgumentException if the move is not legal
+     */
+    @Override
+    public void makeMove(Direction direction){
+        if(!isLegalMove(direction)){
+            throw new IllegalArgumentException("Cannot move in direction "+direction);
+        }
+
+        currentPosition=currentPosition.move(direction,currentStepSize);
+
+        if(SHIFTER_CELLS.contains(currentPosition)){
+            currentStepSize=(currentStepSize==2) ? 3 : 2;
+        }
+    }
+
+    /**
+     * Returns the set of all legal moves from the current state.
+     *
+     * @return a set containing all legal directions
+     */
+    @Override
+    public Set<Direction> getLegalMoves() {
+        Set<Direction> moves= EnumSet.noneOf(Direction.class);
+        for(Direction dir:Direction.values()){
+            if(isLegalMove(dir))
+                moves.add(dir);
+        }
+        return moves;
+    }
+
+    /**
+     * Returns a copy of the current state.
+     *
+     * @return a new state instance with identical properties
+     */
+    @Override
+    public StrideShifterState copy() {
+        return new StrideShifterState(this);
+    }
+
+    /**
      * Gets the current position of the token on the board.
      *
      * @return the current position
@@ -71,12 +164,24 @@ public class StrideShifterState {
         return currentStepSize;
     }
 
-    /**
-     * Checks if the puzzle is solved (the token has reached the goal).
-     *
-     * @return true if the token is at the goal position, false otherwise
-     */
-    public boolean isGoal(){
-        return currentPosition.equals(GOAL_POSITION);
+    @Override
+    public boolean equals(Object o) {
+        if(this==o) return true;
+        if(o==null || getClass()!=o.getClass()) return false;
+        return currentStepSize == ((StrideShifterState) o).currentStepSize && Objects.equals(currentPosition, ((StrideShifterState) o).currentPosition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentPosition, currentStepSize);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StrideShifterState{");
+        sb.append("currentPosition=").append(currentPosition);
+        sb.append(", currentStepSize=").append(currentStepSize);
+        sb.append('}');
+        return sb.toString();
     }
 }
