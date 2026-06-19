@@ -3,52 +3,65 @@ package hu.unideb.inf.strideshifter.model;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
+
 import puzzle.State;
 
-public class StrideShifterState implements State<Direction, StrideShifterState>{
+public class StrideShifterState implements State<Direction, StrideShifterState> {
 
-    /** The size of the board (8x8).*/
-    public static final int BOARD_SIZE=8;
+    /**
+     * The size of the board (8x8).
+     */
+    public static final int BOARD_SIZE = 8;
 
-    /** The starting position of the token (top-left corner). */
-    public static final Position START_POSITION=new Position(0,0);
+    /**
+     * The starting position of the token (top-left corner).
+     */
+    public static final Position START_POSITION = new Position(0, 0);
 
-    /** The goal position to reach (bottom-right corner). */
-    public static final Position GOAL_POSITION=new Position(BOARD_SIZE-1,BOARD_SIZE-1);
+    /**
+     * The goal position to reach (bottom-right corner).
+     */
+    public static final Position GOAL_POSITION = new Position(BOARD_SIZE - 1, BOARD_SIZE - 1);
 
-    /** The initial step size of the token. */
-    public static final int INITIAL_STEP_SIZE=2;
+    /**
+     * The initial step size of the token.
+     */
+    public static final int INITIAL_STEP_SIZE = 2;
 
     /**
      * Feature Toggle: if true, the token could not jump over walls.
      * If false, the token cannot step on the walls but could jump over.
      */
-    public static final boolean STRICT_WALLS=true;
+    public static final boolean STRICT_WALLS = true;
 
-    /** The positions of the walls, where the token cannot step. */
-    public static final Set<Position> WALLS=Set.of(
-            new Position(2,2),
-            new Position(2,7),
-            new Position(4,1),
-            new Position(5,5),
-            new Position(7,3)
+    /**
+     * The positions of the walls, where the token cannot step.
+     */
+    public static final Set<Position> WALLS = Set.of(
+            new Position(2, 2),
+            new Position(2, 7),
+            new Position(4, 1),
+            new Position(5, 5),
+            new Position(7, 3)
     );
 
-    /** The positions of the step-changing cells. */
-    public static final Set<Position> SHIFTER_CELLS=Set.of(
-            new Position(0,4),
-            new Position(1,2),
-            new Position(1,6),
-            new Position(3,2),
-            new Position(3,4),
-            new Position(4,0),
-            new Position(4,3),
-            new Position(4,7),
-            new Position(5,3),
-            new Position(5,6),
-            new Position(6,2),
-            new Position(6,7),
-            new Position(7,0)
+    /**
+     * The positions of the step-changing cells.
+     */
+    public static final Set<Position> SHIFTER_CELLS = Set.of(
+            new Position(0, 4),
+            new Position(1, 2),
+            new Position(1, 6),
+            new Position(3, 2),
+            new Position(3, 4),
+            new Position(4, 0),
+            new Position(4, 3),
+            new Position(4, 7),
+            new Position(5, 3),
+            new Position(5, 6),
+            new Position(6, 2),
+            new Position(6, 7),
+            new Position(7, 0)
     );
 
     private Position currentPosition;
@@ -57,9 +70,9 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
     /**
      * Creates a new game state set to the initial position and step size.
      */
-    public StrideShifterState(){
-        this.currentPosition=START_POSITION;
-        this.currentStepSize=INITIAL_STEP_SIZE;
+    public StrideShifterState() {
+        this.currentPosition = START_POSITION;
+        this.currentStepSize = INITIAL_STEP_SIZE;
     }
 
     /**
@@ -78,7 +91,7 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
      * @return true if the token is at the goal position, false otherwise
      */
     @Override
-    public boolean isSolved(){
+    public boolean isSolved() {
         return currentPosition.equals(GOAL_POSITION);
     }
 
@@ -88,9 +101,9 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
      * @param position the position to check
      * @return true if the position is valid, false otherwise
      */
-    public boolean isOnBoard(Position position){
-        return position.row()>=0 && position.row()<BOARD_SIZE
-                && position.col()>=0 && position.col()<BOARD_SIZE;
+    public boolean isOnBoard(Position position) {
+        return position.row() >= 0 && position.row() < BOARD_SIZE
+                && position.col() >= 0 && position.col() < BOARD_SIZE;
     }
 
     /**
@@ -106,7 +119,8 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
             return false;
         }
 
-        if (STRICT_WALLS) {for (int i = 1; i <= currentStepSize; i++) {
+        if (STRICT_WALLS) {
+            for (int i = 1; i <= currentStepSize; i++) {
                 Position pathPosition = currentPosition.move(move, i);
                 if (!isOnBoard(pathPosition) || WALLS.contains(pathPosition)) {
                     return false;
@@ -127,15 +141,15 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
      * @throws IllegalArgumentException if the move is not legal
      */
     @Override
-    public void makeMove(Direction direction){
-        if(!isLegalMove(direction)){
-            throw new IllegalArgumentException("Cannot move in direction "+direction);
+    public void makeMove(Direction direction) {
+        if (!isLegalMove(direction)) {
+            throw new IllegalArgumentException("Cannot move in direction " + direction);
         }
 
-        currentPosition=currentPosition.move(direction,currentStepSize);
+        currentPosition = currentPosition.move(direction, currentStepSize);
 
-        if(SHIFTER_CELLS.contains(currentPosition)){
-            currentStepSize=(currentStepSize==2) ? 3 : 2;
+        if (SHIFTER_CELLS.contains(currentPosition)) {
+            currentStepSize = (currentStepSize == 2) ? 3 : 2;
         }
     }
 
@@ -146,9 +160,9 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
      */
     @Override
     public Set<Direction> getLegalMoves() {
-        Set<Direction> moves= EnumSet.noneOf(Direction.class);
-        for(Direction dir:Direction.values()){
-            if(isLegalMove(dir))
+        Set<Direction> moves = EnumSet.noneOf(Direction.class);
+        for (Direction dir : Direction.values()) {
+            if (isLegalMove(dir))
                 moves.add(dir);
         }
         return moves;
@@ -169,7 +183,7 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
      *
      * @return the current position
      */
-    public Position getCurrentPosition(){
+    public Position getCurrentPosition() {
         return currentPosition;
     }
 
@@ -178,14 +192,14 @@ public class StrideShifterState implements State<Direction, StrideShifterState>{
      *
      * @return the current step size
      */
-    public int getCurrentStepSize(){
+    public int getCurrentStepSize() {
         return currentStepSize;
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this==o) return true;
-        if(o==null || getClass()!=o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         return currentStepSize == ((StrideShifterState) o).currentStepSize && Objects.equals(currentPosition, ((StrideShifterState) o).currentPosition);
     }
 
