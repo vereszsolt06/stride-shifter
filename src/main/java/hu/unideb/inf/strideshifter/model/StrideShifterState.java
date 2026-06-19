@@ -19,6 +19,12 @@ public class StrideShifterState implements State<Direction, StrideShifterState>,
     /** The initial step size of the token. */
     public static final int INITIAL_STEP_SIZE=2;
 
+    /**
+     * Feature Toggle: if true, the token could not jump over walls.
+     * If false, the token cannot step on the walls but could jump over.
+     */
+    public static final boolean STRICT_WALLS=true;
+
     /** The positions of the walls, where the token cannot step. */
     public static final Set<Position> WALLS=Set.of(
             new Position(2,2),
@@ -88,17 +94,29 @@ public class StrideShifterState implements State<Direction, StrideShifterState>,
     }
 
     /**
-     * Checks if moving in the given direction is legal from the current state.
+     * Checks if moving in the specified direction is legal from the current state.
+     * Uses the STRICT_WALLS toggle to determine if jumping over walls is allowed.
      *
-     * @param direction the direction to move
+     * @param move the direction to move
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isLegalMove(Direction direction){
-        if(direction == null)
+    public boolean isLegalMove(Direction move) {
+        if (move == null) {
             return false;
-        Position nextPosition = currentPosition.move(direction,currentStepSize);
-        return isOnBoard(nextPosition) && !WALLS.contains(nextPosition);
+        }
+
+        if (STRICT_WALLS) {for (int i = 1; i <= currentStepSize; i++) {
+                Position pathPosition = currentPosition.move(move, i);
+                if (!isOnBoard(pathPosition) || WALLS.contains(pathPosition)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            Position nextPosition = currentPosition.move(move, currentStepSize);
+            return isOnBoard(nextPosition) && !WALLS.contains(nextPosition);
+        }
     }
 
     /**
