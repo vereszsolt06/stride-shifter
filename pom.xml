@@ -23,7 +23,7 @@
         <javafx.version>25</javafx.version>
         <junit.version>5.10.2</junit.version>
         <tinylog.version>2.6.2</tinylog.version>
-        <exec.mainClass>hu.unideb.inf.strideshifter.Main</exec.mainClass>
+        <exec.mainClass>hu.unideb.inf.strideshifter.MainLauncher</exec.mainClass>
     </properties>
 
     <dependencies>
@@ -58,6 +58,18 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.19.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.19.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

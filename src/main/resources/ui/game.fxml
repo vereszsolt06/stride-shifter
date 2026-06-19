@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.strideshifter.controller.StrideShifterController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+    </padding>
+
+    <Label fx:id="statusLabel" text="Current step distance: 2" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <GridPane fx:id="boardGrid" alignment="CENTER" hgap="2" vgap="2">
+    </GridPane>
+</VBox>

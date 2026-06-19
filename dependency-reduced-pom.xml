@@ -124,7 +124,7 @@
   <properties>
     <maven.compiler.release>25</maven.compiler.release>
     <tinylog.version>2.6.2</tinylog.version>
-    <exec.mainClass>hu.unideb.inf.strideshifter.Main</exec.mainClass>
+    <exec.mainClass>hu.unideb.inf.strideshifter.MainConsole</exec.mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javafx.version>25</javafx.version>
     <junit.version>5.10.2</junit.version>
