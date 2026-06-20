@@ -20,11 +20,10 @@ public final class LeaderboardManager {
     /**
      * The hidden file in the user's home directory where scores are stored.
      */
-    private static final File LEADERBOARD_FILE =
-            Path.of(System.getProperty("user.home"), ".strideshifter_scores.json").toFile();
+    private static final File LEADERBOARD_FILE = new File("leaderboard.json");
 
     /**
-     * Configured Jackson mapper for handling JSON serialization, including Java 8 Dates.
+     * Configured Jackson mapper for handling JSON
      */
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper()
             .registerModule(new JavaTimeModule())

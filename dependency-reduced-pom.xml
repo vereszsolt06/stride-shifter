@@ -28,7 +28,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.12</version>
+        <version>0.8.15</version>
         <executions>
           <execution>
             <goals>
@@ -124,7 +124,7 @@
   <properties>
     <maven.compiler.release>25</maven.compiler.release>
     <tinylog.version>2.6.2</tinylog.version>
-    <exec.mainClass>hu.unideb.inf.strideshifter.MainConsole</exec.mainClass>
+    <exec.mainClass>hu.unideb.inf.strideshifter.MainLauncher</exec.mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javafx.version>25</javafx.version>
     <junit.version>5.10.2</junit.version>

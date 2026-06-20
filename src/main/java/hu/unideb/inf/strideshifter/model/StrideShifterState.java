@@ -162,8 +162,9 @@ public class StrideShifterState implements State<Direction, StrideShifterState> 
     public Set<Direction> getLegalMoves() {
         Set<Direction> moves = EnumSet.noneOf(Direction.class);
         for (Direction dir : Direction.values()) {
-            if (isLegalMove(dir))
+            if (isLegalMove(dir)) {
                 moves.add(dir);
+            }
         }
         return moves;
     }

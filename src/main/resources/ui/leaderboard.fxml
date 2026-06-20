@@ -13,7 +13,7 @@
         <Insets bottom="30.0" left="50.0" right="50.0" top="30.0" />
     </padding>
 
-    <Label text="Top 10 Leaderboard">
+    <Label text="Leaderboard">
         <font>
             <Font name="System Bold" size="28.0" />
         </font>

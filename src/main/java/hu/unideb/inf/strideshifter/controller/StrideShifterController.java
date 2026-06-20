@@ -114,7 +114,7 @@ public class StrideShifterController {
         Parent root = fxmlLoader.load();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root, 800, 800));
+        stage.setScene(new Scene(root,800,800));
         stage.show();
     }
 
@@ -170,7 +170,7 @@ public class StrideShifterController {
 
         // A boardGrid segítségével lekérjük az aktuális ablakot (Stage)
         Stage stage = (Stage) boardGrid.getScene().getWindow();
-        stage.setScene(new Scene(root, 800, 800));
+        stage.setScene(new Scene(root,800,800));
         stage.show();
     }
 
