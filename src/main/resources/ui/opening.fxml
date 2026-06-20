@@ -22,7 +22,9 @@
 
     <TextField fx:id="playerNameField" maxWidth="300.0" promptText="Player name..." />
 
-    <Button fx:id="startButton" mnemonicParsing="false" onAction="#startAction" prefHeight="40.0" prefWidth="150.0" text="Start Game" />
+    <Button fx:id="startButton" mnemonicParsing="false" onAction="#startAction" prefHeight="40.0" prefWidth="200.0" text="Start Game" />
+
+    <Button mnemonicParsing="false" onAction="#viewLeaderboardAction" prefHeight="40.0" prefWidth="200.0" text="View Leaderboard" />
 
     <Label fx:id="errorLabel" textFill="RED" />
 </VBox>

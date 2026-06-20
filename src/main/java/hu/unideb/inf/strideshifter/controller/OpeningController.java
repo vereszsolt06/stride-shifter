@@ -61,4 +61,23 @@ public class OpeningController {
         stage.setScene(new Scene(root,800,800));
         stage.show();
     }
+
+    /**
+     * Handles the action when the view leaderboard button is clicked.
+     * Switches the scene directly to the leaderboard view.
+     *
+     * @param event the action event triggered by clicking the button
+     * @throws IOException if the leaderboard FXML file cannot be loaded
+     */
+    @FXML
+    private void viewLeaderboardAction(ActionEvent event) throws IOException {
+        Logger.info("Switching to leaderboard scene from the main menu.");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/leaderboard.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root, 800, 800));
+        stage.show();
+    }
 }

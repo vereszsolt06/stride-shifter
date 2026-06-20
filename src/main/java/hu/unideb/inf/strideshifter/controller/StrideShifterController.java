@@ -1,18 +1,23 @@
 package hu.unideb.inf.strideshifter.controller;
 
-import hu.unideb.inf.strideshifter.model.Direction;
-import hu.unideb.inf.strideshifter.model.Position;
-import hu.unideb.inf.strideshifter.model.StrideShifterState;
+import hu.unideb.inf.strideshifter.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import org.tinylog.Logger;
 
+import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +83,42 @@ public class StrideShifterController {
     }
 
     /**
+     * Handles the action when the restart button is clicked.
+     * Resets the current puzzle state and the move counter, then redraws the board.
+     *
+     * @param event the action event triggered by clicking the button
+     */
+    @FXML
+    private void handleRestart(javafx.event.ActionEvent event) {
+        Logger.info("Restarting the game session for player: {}", playerName);
+
+        this.gameState = new StrideShifterState();
+        this.numberOfMoves = 0;
+
+        updateStatusLabel();
+        drawBoard();
+    }
+
+    /**
+     * Handles the action when the back to menu button is clicked during a game.
+     * Switches the scene back to the opening screen.
+     *
+     * @param event the action event triggered by clicking the button
+     * @throws IOException if the opening FXML file cannot be loaded
+     */
+    @FXML
+    private void handleBackToMenu(ActionEvent event) throws IOException {
+        Logger.info("Player returning to main menu from active game.");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/opening.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root, 800, 800));
+        stage.show();
+    }
+
+    /**
      * Makes a valid move on the board.
      * Called by clicking on a valid highlighted cell.
      *
@@ -106,8 +147,31 @@ public class StrideShifterController {
             Logger.info("Game solved by {} in {} moves.", playerName, numberOfMoves);
             feedbackLabel.setStyle("-fx-text-fill: green;");
             feedbackLabel.setText("Congratulations! You reached the goal!");
-            // TODO: Ide fog jönni a LeaderboardManager-es mentés!
+
+            try{
+                GameResult result=new GameResult(playerName, numberOfMoves, ZonedDateTime.now());
+                LeaderboardManager.addResult(result);
+
+                switchToLeaderboard();
+            } catch (Exception e){
+                Logger.error(e,"Failed to save result or load leaderboard UI");
+            }
         }
+    }
+
+    /**
+     * Switches the current scene to the Leaderboard view.
+     *
+     * @throws Exception if the FXML cannot be loaded
+     */
+    private void switchToLeaderboard() throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/leaderboard.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // A boardGrid segítségével lekérjük az aktuális ablakot (Stage)
+        Stage stage = (Stage) boardGrid.getScene().getWindow();
+        stage.setScene(new Scene(root, 800, 800));
+        stage.show();
     }
 
     /**
